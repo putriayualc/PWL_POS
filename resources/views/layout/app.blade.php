@@ -61,7 +61,7 @@
 <link rel="stylesheet" href="https://cdn.datatables.net/2.0.2/css/dataTables.dataTables.css">
 
 <style type="text/css">
-    {{-- You can add AdminLTE customizations here --}}
+    /* You can add AdminLTE customizations here */
     /*
     .card-header {
         border-bottom: none;
