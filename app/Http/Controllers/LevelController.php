@@ -2,8 +2,11 @@
 
 namespace App\Http\Controllers;
 
+use App\Models\LevelModel;
 use Illuminate\Http\Request;
+use Illuminate\Support\Facades\Hash;
 use Illuminate\Support\Facades\DB;
+use Monolog\Level;
 
 class LevelController extends Controller
 {
@@ -21,4 +24,17 @@ class LevelController extends Controller
         return view('level', ['data' => $data]);
 
    }
+
+   public function tambah(){
+      return view('level_tambah');
+  }
+
+  public function tambah_simpan(Request $request){
+   LevelModel::create([
+       'level_kode' => $request->level_kode,
+       'level_nama' => $request->level_nama,
+   ]);
+
+   return redirect('/level');
+}
 }
