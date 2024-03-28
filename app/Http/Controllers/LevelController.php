@@ -30,7 +30,12 @@ class LevelController extends Controller
   }
 
   public function tambah_simpan(Request $request){
-   LevelModel::create([
+    $request->validate([
+        'level_kode' => 'bail|required|string|max:10',
+        'level_nama' => 'bail|required|string|max:100',
+    ]);
+
+    LevelModel::create([
        'level_kode' => $request->level_kode,
        'level_nama' => $request->level_nama,
    ]);

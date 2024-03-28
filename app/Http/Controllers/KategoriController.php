@@ -40,7 +40,7 @@ class KategoriController extends Controller
 
     public function store(Request $request): RedirectResponse{
         $validated = $request->validate([
-            'kodeKategori' => 'bail|required|min:3|unique:posts|string|max:10',
+            'kodeKategori' => 'bail|required|min:3|string|max:10',
             'namaKategori' => 'bail|required|string|max:100',
         ]);
 

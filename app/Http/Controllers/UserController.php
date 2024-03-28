@@ -118,6 +118,12 @@ class UserController extends Controller
     }
 
     public function tambah_simpan(Request $request){
+        $validated = $request->validate([
+            'username' => 'bail|required|string|max:20',
+            'nama' => 'bail|required|string|max:100',
+            'password' => 'bail|required|max:255',
+            'level_id' => 'bail|required',
+        ]);
         UserModel::create([
             'username' => $request->username,
             'nama' => $request->nama,

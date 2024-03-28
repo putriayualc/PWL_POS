@@ -15,7 +15,7 @@
                 <div class="card-body">
                     <div class="form-group">
                         <label for="kodeKategori">Kode Kategori</label>
-                        <input type="text" name="kodeKategori" id="kodeKategori" class="@error('kodeKategori') is-invalid                         
+                        <input type="text" name="kodeKategori" id="kodeKategori" class="form-control @error('kodeKategori') is-invalid                         
                         @enderror">
 
                         @error('kodeKategori')
