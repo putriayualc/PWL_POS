@@ -4,6 +4,7 @@ use App\Http\Controllers\LevelController;
 use App\Http\Controllers\KategoriController;
 use App\Http\Controllers\POSController;
 use App\Http\Controllers\UserController;
+use App\Http\Controllers\WelcomeController;
 use Illuminate\Support\Facades\Route;
 
 /*
@@ -16,10 +17,6 @@ use Illuminate\Support\Facades\Route;
 | be assigned to the "web" middleware group. Make something great!
 |
 */
-
-Route::get('/', function () {
-    return view('welcome');
-});
 
 Route::get('/level', [LevelController::class, 'index']);
 Route::get('/level/tambah', [LevelController::class, 'tambah']);
@@ -40,3 +37,5 @@ Route::put('/kategori/save_edit/{id}', [KategoriController::class, 'save_edit'])
 Route::get('/kategori/delete/{id}', [KategoriController::class, 'deleteKtg']);
 
 Route::resource('m_user', POSController::class);
+
+Route::get('/',[WelcomeController::class,'index']);
