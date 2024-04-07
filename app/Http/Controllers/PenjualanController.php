@@ -4,6 +4,7 @@ namespace App\Http\Controllers;
 
 use App\Models\BarangModel;
 use App\Models\PenjualanDetailModel;
+use App\Models\PenjualanModel;
 use Illuminate\Http\Request;
 use Yajra\DataTables\Facades\DataTables;
 
@@ -46,5 +47,123 @@ class PenjualanController extends Controller
             })
             ->rawColumns(['aksi'])
             ->make(true);
+    }
+
+    public function create()
+    {
+        $breadcrumb = (object) [
+            'title' => 'Tambah Transaksi',
+            'list'  => ['Home', 'Penjualan', 'Tambah']
+        ];
+
+        $page = (object) [
+            'title' => 'Tambah Penjualan'
+        ];
+
+        $barang = BarangModel::all();
+        $penjualan = PenjualanModel::all(); 
+        $activeMenu = 'penjualan';
+        
+        return view('penjualan.create', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang, 'penjualan' => $penjualan, 'activeMenu' => $activeMenu]);
+    }
+
+    public function store(Request $request)
+    {
+        $request->validate([
+            'barang_id'    => 'required|integer',
+            'penjualan_id' => 'required|integer',
+            'jumlah'       => 'required|integer'
+            
+        ]);
+
+        $barang = BarangModel::find($request->barang_id);
+        $harga = $barang->harga_jual * $request->jumlah;
+
+        PenjualanDetailModel::create([
+            'penjualan_id' => $request->penjualan_id,
+            'barang_id'    => $request->barang_id,
+            'jumlah'       => $request->jumlah,
+            'harga'        => $harga,
+            'created_at'   => now()
+        ]);
+
+        return redirect('/penjualan')->with('success', 'Data penjualan berhasil disimpan');
+    }
+
+    public function show(string $id)
+    {
+        $detail = PenjualanDetailModel::with(['barang','sale'])->find($id);
+
+        $breadcrumb = (object) [
+            'title' => 'Detail Penjualan',
+            'list'  => ['Home', 'Penjualan', 'Detail']
+        ];
+
+        $page = (object) [
+            'title' => 'Detail Penjualan Barang'
+        ];
+
+        $activeMenu = 'penjualan'; // set menu yang sedang aktif
+        
+        return view('penjualan.show', ['breadcrumb' => $breadcrumb, 'page' => $page, 'detail' => $detail, 'activeMenu' => $activeMenu]);
+    }
+
+    public function edit(string $id)
+     {
+         $detail = PenjualanDetailModel::find($id); 
+ 
+         $breadcrumb = (object) [
+             'title' => 'Edit Penjualan',
+             'list'  => ['Home', 'Penjualan', 'Edit']
+         ];
+ 
+         $page = (object) [
+             'title' => 'Edit Penjualan barang'
+         ];
+ 
+         $barang = BarangModel::all();
+         $penjualan = PenjualanModel::all(); 
+         $activeMenu = 'penjualan';
+         
+         return view('penjualan.edit', ['breadcrumb' => $breadcrumb, 'page' => $page, 'barang' => $barang, 'penjualan' => $penjualan,'detail'=>$detail, 'activeMenu' => $activeMenu]);
+     }
+
+     public function update(Request $request, string $id)
+     {
+         $request->validate([
+            'barang_id'    => 'required|integer',
+            'penjualan_id' => 'required|integer',
+            'jumlah'       => 'required|integer'
+         ]);
+
+         $barang = BarangModel::find($request->barang_id);
+        $harga = $barang->harga_jual * $request->jumlah;
+ 
+         PenjualanDetailModel::find($id)->update([
+            'penjualan_id' => $request->penjualan_id,
+            'barang_id'    => $request->barang_id,
+            'jumlah'       => $request->jumlah,
+            'harga'        => $harga,
+            'updated_at'   => now()
+         ]);
+ 
+         return redirect('/penjualan')->with('success', 'Data penjualan barang berhasil diubah');
+     }
+
+     public function destroy(string $id)
+    {
+        $check = PenjualanDetailModel::find($id); 
+        if (!$check) {
+            return redirect('/penjualan')->with('error', 'Data penjualan barang tidak ditemukan');
+        }
+
+        try {
+            PenjualanDetailModel::destroy($id);
+
+            return redirect('/penjualan')->with('success', 'Data penjualan barang berhasil dihapus');
+        } catch (\Illuminate\Database\QueryException $e) {
+            // jika terjadi error ketika menghapus data, redirect kembali ke halaman dengan membawa pesan error
+            return redirect('/penjualan')->with('error', 'Data penjualan barang gagal dihapus karena masih terdapat tabel lain yang terkait dengan data ini');
+        }
     }
 }
