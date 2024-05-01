@@ -13,6 +13,14 @@ class UserModel extends \Illuminate\Foundation\Auth\User
 {
     use HasFactory;
 
+    public function getJWTIdentifier(){
+        return $this->getKey();
+    }
+
+    public function getJWTCustomClaims(){
+        return [];
+    }
+    
     protected $table = 'm_user'; //Mendefinisikan nama tabel yang digunakan oleh model ini
     protected $primaryKey = 'user_id'; //Mendefinisikan primary key dari tabel yang digunakan
 
