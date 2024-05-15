@@ -15,20 +15,25 @@ class FileUploadController extends Controller
         // dump($request->file('berkas'));
         // return "Pemrosesan file upload di sini";
 
-        if($request->hasFile('berkas')) {
-            echo "path(): ".$request->berkas->path();
-            echo "<br>";
-            echo "extension(): ".$request->berkas->extension();
-            echo "<br>";
-            echo "getClientOriginalExtension(): ".
-            $request->berkas->getClientOriginalExtension();
-            echo "<br>";
-            echo "getMimeType(): ".$request->berkas->getMimeType();
-            echo "<br>";
-            echo "getClientOriginalName(): ".
-            $request->berkas->getClientOriginalName();
-            echo "<br>";
-            echo "getSize(): ".$request->berkas->getSize();
-        }
+        // if($request->hasFile('berkas')) {
+        //     echo "path(): ".$request->berkas->path();
+        //     echo "<br>";
+        //     echo "extension(): ".$request->berkas->extension();
+        //     echo "<br>";
+        //     echo "getClientOriginalExtension(): ".
+        //     $request->berkas->getClientOriginalExtension();
+        //     echo "<br>";
+        //     echo "getMimeType(): ".$request->berkas->getMimeType();
+        //     echo "<br>";
+        //     echo "getClientOriginalName(): ".
+        //     $request->berkas->getClientOriginalName();
+        //     echo "<br>";
+        //     echo "getSize(): ".$request->berkas->getSize();
+        // }
+
+        $request->validate([
+            'berkas'=>'required|file|image|max:5000'
+        ]);
+        echo $request->berkas->getClientOriginalName()."lolos validasi";
     }
 }
