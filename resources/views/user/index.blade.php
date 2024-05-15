@@ -34,6 +34,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Foto Profil</th>
                     <th>Username</th>
                     <th>Nama</th>
                     <th>Level Pengguna</th>
@@ -66,6 +67,15 @@
                     className: "text-center",
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: "image",
+                    className: "",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data,type, row) {
+                        return '<img src="' + data + '" alt="Image" style="width: 100px; height: auto;">';
+                    }
                 },
                 {
                     data: "username",

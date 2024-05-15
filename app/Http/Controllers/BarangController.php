@@ -28,7 +28,7 @@ class BarangController extends Controller
 
     public function list(Request $request)
     {
-        $barangs = BarangModel::select('barang_id', 'kategori_id','barang_kode', 'barang_nama', 'harga_beli','harga_jual')
+        $barangs = BarangModel::select('barang_id', 'kategori_id','barang_kode', 'barang_nama', 'harga_beli','harga_jual','image')
             ->with('barang');
 
         //filter data user berdasarkan kategori_id
@@ -72,15 +72,22 @@ class BarangController extends Controller
             'barang_nama'      => 'required|string|max:100|',
             'kategori_id'      => 'required|integer',
             'harga_beli'      => 'required|integer',
-            'harga_jual'      => 'required|integer'
+            'harga_jual'      => 'required|integer',
+            'gambar'            => 'required|file|image|max:1000'
         ]);
+
+        $extFile = $request->gambar->getClientOriginalExtension();
+        $namaFile = $request->barang_kode."_".$request->barang_nama.".$extFile";
+        $request->gambar->storeAs('public/barang', $namaFile);
+        $path = 'barang/'.$namaFile;
 
         BarangModel::create([
             'barang_kode'  => $request->barang_kode,
             'barang_nama'  => $request->barang_nama,
             'kategori_id'      => $request->kategori_id,
             'harga_beli'      => $request->harga_beli,
-            'harga_jual'      => $request->harga_jual
+            'harga_jual'      => $request->harga_jual,
+            'image'     => $path
         ]);
 
         return redirect('/barang')->with('success', 'Data barang berhasil disimpan');
@@ -130,15 +137,24 @@ class BarangController extends Controller
             'barang_nama'      => 'required|string|max:100|',
             'kategori_id'      => 'required|integer',
             'harga_beli'      => 'required|integer',
-            'harga_jual'      => 'required|integer'
+            'harga_jual'      => 'required|integer',
+            'gambar'            => 'nullable|image|max:1000'
          ]);
+
+         if($request->gambar){
+            $extFile = $request->gambar->getClientOriginalExtension();
+            $namaFile = $request->level_id."_".$request->username.".$extFile";
+            $request->gambar->storeAs('public/barang', $namaFile);
+            $path = 'barang/'.$namaFile;            
+         }
  
          BarangModel::find($id)->update([
             'barang_kode'  => $request->barang_kode,
             'barang_nama'  => $request->barang_nama,
             'kategori_id'      => $request->kategori_id,
             'harga_beli'      => $request->harga_beli,
-            'harga_jual'      => $request->harga_jual
+            'harga_jual'      => $request->harga_jual,
+            'image'    => $request->gambar ? $path : BarangModel::find($id)->image
          ]);
  
          return redirect('/barang')->with('success', 'Data barang berhasil diubah');

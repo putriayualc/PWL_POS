@@ -13,7 +13,11 @@
         </div>
         <a href="{{ url('user') }}" class="btn btn-sm btn-default mt-2">Kembali</a>
         @else
-        <form method="POST" action="{{ url('/user/'.$user->user_id) }}" class="form-horizontal">
+        <div class="text-center">
+            <img src="{{ asset($user->image) }}" alt="Foto Profil" style="max-width: 200px;">
+        </div>
+        <br>
+        <form method="POST" action="{{ url('/user/'.$user->user_id) }}" class="form-horizontal" enctype="multipart/form-data">
             @csrf
             @method('PUT') <!-- tambahkan baris ini untuk proses edit yang membutuhkan method PUT -->
             <div class="form-group row">
@@ -56,6 +60,17 @@
                     <small class="form-text text-danger">{{ $message }}</small>
                     @else
                     <small class="form-text text-muted">Abaikan (jangan diisi) jika tidak ingin mengganti password user.</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Foto Profil</label>
+                <div class="col-11">
+                    <input type="file" class="form-control" id="gambar" name="gambar" value="{{ old('image', $user->image)}}">
+                    @error('gambar')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @else
+                    <small class="form-text text-muted">Abaikan (jangan diisi) jika tidak ingin mengganti foto.</small>
                     @enderror
                 </div>
             </div>

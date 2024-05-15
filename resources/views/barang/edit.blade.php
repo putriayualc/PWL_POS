@@ -67,6 +67,15 @@
                 </div>
             </div>
             <div class="form-group row">
+                <label class="col-1 control-label col-form-label">Gambar</label>
+                <div class="col-11">
+                    <input type="file" class="form-control" id="gambar" name="gambar" required>
+                    @error('gambar')
+                    <small class="form-text text-danger">{{ $message }}</small>
+                    @enderror
+                </div>
+            </div>
+            <div class="form-group row">
                 <label class="col-1 control-label col-form-label"></label>
                 <div class="col-11">
                     <button type="submit" class="btn btn-primary btn-sm">Simpan</button>

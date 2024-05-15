@@ -34,6 +34,7 @@
             <thead>
                 <tr>
                     <th>ID</th>
+                    <th>Gambar</th>
                     <th>Kode Barang</th>
                     <th>Nama Barang</th>
                     <th>Kategori</th>
@@ -68,6 +69,15 @@
                     className: "text-center",
                     orderable: false,
                     searchable: false
+                },
+                {
+                    data: "image",
+                    className: "",
+                    orderable: false,
+                    searchable: false,
+                    render: function(data,type, row) {
+                        return '<img src="' + data + '" alt="Image" style="width: 100px; height: auto;">';
+                    }
                 },
                 {
                     data: "barang_kode",

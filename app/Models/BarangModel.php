@@ -23,7 +23,7 @@ class BarangModel extends Model
 
     public function image(): Attribute{
         return Attribute::make(
-            get: fn ($image) => url('/storage/posts/'. $image)
+            get: fn ($image) => url('/storage/'. $image)
         );
     }
 }

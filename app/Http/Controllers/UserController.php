@@ -180,7 +180,7 @@ class UserController extends Controller
     // Ambil data user dalam bentuk json untuk datatables
     public function list(Request $request)
     {
-        $users = UserModel::select('user_id', 'username', 'nama', 'level_id')
+        $users = UserModel::select('user_id', 'username', 'nama', 'level_id','image')
             ->with('level');
 
         //filter data user berdasarkan lecvel_id
@@ -225,14 +225,21 @@ class UserController extends Controller
             'username'  => 'required|string|min:3|unique:m_user,username',
             'nama'      => 'required|string|max:100|',
             'password'  => 'required|min:5|',
-            'level_id'  => 'required|integer|'
+            'level_id'  => 'required|integer|',
+            'gambar'    => 'required|file|image|max:1000'
         ]);
+
+        $extFile = $request->gambar->getClientOriginalExtension();
+        $namaFile = $request->level_id."_".$request->username.".$extFile";
+        $request->gambar->storeAs('public/profil', $namaFile);
+        $path = 'profil/'.$namaFile;
 
         UserModel::create([
             'username'  => $request->username,
             'nama'      => $request->nama,
             'password'  => bcrypt($request->password), // password dienkripsi sebelum disimpan
-            'level_id'  => $request->level_id
+            'level_id'  => $request->level_id,
+            'image'     => $path
         ]);
 
         return redirect('/user')->with('success', 'Data user berhasil disimpan');
@@ -286,14 +293,23 @@ class UserController extends Controller
              'username'  => 'required|string|min:3|unique:m_user,username,'.$id.',user_id',
              'nama'      => 'required|string|max:100',  // nama harus diisi, berupa string, dan maksimal 100 karakter
              'password'  => 'nullable|min:5',           // password bisa diisi (minimal 5 karakter) dan bisa tidak diisi 
-             'level_id'  => 'required|integer'           // id_level harus diisi dan berupa angka
+             'level_id'  => 'required|integer',           // id_level harus diisi dan berupa angka
+             'gambar'    => 'nullable|image|max:1000'
          ]);
- 
+        
+
+         if($request->gambar){
+            $extFile = $request->gambar->getClientOriginalExtension();
+            $namaFile = $request->level_id."_".$request->username.".$extFile";
+            $request->gambar->storeAs('public/profil', $namaFile);
+            $path = 'profil/'.$namaFile;            
+         }
          UserModel::find($id)->update([
              'username'  => $request->username,
              'nama'      => $request->nama,
              'password'  => $request->password ? bcrypt($request->password) : UserModel::find($id)->password,
-             'level_id'  => $request->level_id
+             'level_id'  => $request->level_id,
+             'image'    => $request->gambar ? $path : UserModel::find($id)->image
          ]);
  
          return redirect('/user')->with('success', 'Data user berhasil diubah');
