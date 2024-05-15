@@ -99,5 +99,8 @@ Route::group(['middleware'=> ['auth']], function(){
     });
 });
 
-Route::get('/file-upload',[FileUploadController::class,'fileupload']);
+Route::get('/file-upload',[FileUploadController::class,'fileUpload']);
 Route::post('/file-upload',[FileUploadController::class,'prosesFileUpload']);
+
+Route::get('/file-upload-rename',[FileUploadController::class,'fileUpload_Rename']);
+Route::post('/file-upload-rename',[FileUploadController::class,'prosesFileUpload_Rename']);

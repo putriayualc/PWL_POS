@@ -49,4 +49,23 @@ class FileUploadController extends Controller
         echo "Tampilkan link:<a href='$pathBaru'>$pathBaru</a>";
         // echo $request->berkas->getClientOriginalName()."lolos validasi";
     }
+
+    public function fileUpload_Rename(){
+        return view('file-upload-rename');
+    }
+
+    public function prosesFileUpload_Rename(Request $request){
+        $request->validate([
+            'rename' => 'required|min:5|alpha_dash',
+            'berkas' => 'required|file|image|max:1000'
+        ]);
+
+        $extFile = $request->berkas->getClientOriginalExtension();
+        $namaFile = $request->rename.".$extFile";
+        $path = $request->berkas->storeAs('public/gambar',$namaFile);
+        $pathBaru = asset('storage/gambar/'.$namaFile);
+
+        echo "Gambar berhasil di upload ke $namaFile di $path <br><br><hr>";
+        echo "<img src='$pathBaru'>";
+    }
 }
